@@ -1,4 +1,7 @@
 [program:{{ item.name }}]
+{% if item.environment is defined %}
+{{ item.environment }}
+{% endif %}
 command={{ item.command }}
 {% if item.configuration is defined %}
 {{ item.configuration }}
