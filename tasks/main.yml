@@ -1,6 +1,25 @@
 ---
+- name: Get amazon linux version from /etc/system-release.
+  shell: cat /etc/system-release | grep 'Amazon Linux release 2.0'
+  changed_when: False
+  ignore_errors: True
+  register: amzn2
+
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
+  when: ansible_distribution != 'Amazon'
+
+- name: Include OS-specific variables (AmazonLinux).
+  include_vars: AmazonLinux.yml
+  when: ansible_distribution == 'Amazon' and amzn2|failed
+
+- name: Include OS-specific variables (AmazonLinux2).
+  include_vars: AmazonLinux2.yml
+  when: ansible_distribution == 'Amazon' and amzn2|success
+
+- name: debug
+  debug:
+    msg: "supervisor_bin_path {{ supervisor_bin_path }}, supervisor_ctl_bin_path {{ supervisor_ctl_bin_path }}"
 
 - name: Ensure Supervisor is installed (specific version).
   pip:
