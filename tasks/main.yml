@@ -1,6 +1,6 @@
 ---
 - name: Get amazon linux version from /etc/system-release.
-  shell: cat /etc/system-release | grep 'Amazon Linux release 2'
+  shell: cat /etc/system-release | egrep -i 'Amazon Linux 2|Amazon Linux release 2'
   changed_when: False
   ignore_errors: True
   register: amzn2
